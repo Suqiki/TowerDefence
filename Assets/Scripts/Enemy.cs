@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
 
     private Transform target;
     private int wavepointIndex = 0;
+   
 
     void Start()
     {
@@ -34,6 +35,8 @@ public class Enemy : MonoBehaviour
         if (wavepointIndex >= Waypoints.points.Length - 1)
         {
             Destroy(gameObject);
+            EnemyCounter.instance.MinusEnemy();
+            //EnemyCounter.enemiesAlive--;
             return;
         }
         

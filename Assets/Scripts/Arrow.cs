@@ -7,6 +7,7 @@ public class Arrow : MonoBehaviour
     private Transform target;
     public float explosionRadius = 0f;
 
+    public int damage = 50;
 
     public float speed = 50f;
     [FormerlySerializedAs("effect")] public GameObject HitEffect;
@@ -45,39 +46,42 @@ public class Arrow : MonoBehaviour
 
     private void HitTarget()
     {
-        //Debug.Log("Hit Target");
         GameObject effectIns = (GameObject)Instantiate(HitEffect, transform.position, transform.rotation);
         Destroy(effectIns, 2f);
+
+        // ținta principala ia damage complet
+        Damage(target, damage);
 
         if (explosionRadius > 0f)
         {
             Explode();
         }
-        else
-        {
-            Damage(target);
-        }
-        
-       
+
         Destroy(gameObject);
     }
 
     private void Explode()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
+
         foreach (Collider hit in colliders)
         {
-            if (hit.tag == "Enemy")
+            if (hit.CompareTag("Enemy") && hit.transform != target)
             {
-                Damage(hit.transform);
+                int splashDamage = damage / 2; // 50% damage
+                Damage(hit.transform, splashDamage);
             }
         }
     }
 
-    void Damage(Transform enemy)
+    void Damage(Transform enemy, int amount)
     {
-        Destroy(enemy.gameObject);
-        EnemyCounter.instance.MinusEnemy();
+        Enemy e = enemy.GetComponent<Enemy>();
+
+        if (e != null)
+        {
+            e.TakeDamage(amount);
+        }
     }
     
     void OnDrawGizmosSelected()

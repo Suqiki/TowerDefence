@@ -17,11 +17,13 @@ public class Node : MonoBehaviour
     
     private Renderer rend;
     private Color startColor;
+    private NodeManager nodeManager;
     
     BuildManager buildManager;
     
     void Start()
     {
+        nodeManager = NodeManager.instance;
         buildManager = BuildManager.instance;
         
         rend = GetComponent<Renderer>();
@@ -67,6 +69,12 @@ public class Node : MonoBehaviour
     {
         if(!buildManager.CanBuild)
             return;
+
+        if (!buildManager.HasMoney)
+        {
+            WarningUI.instance.ShowWarning("Not enough gold!");
+            return;
+        }
         
         if (turretBuild == false && isPurchased == true)
         {
@@ -83,8 +91,21 @@ public class Node : MonoBehaviour
 
     private void PurchaseNode()
     {
+        int cost = nodeManager.GetCurrentCost();
+
+        if (PlayerStats.Gold < cost)
+        {
+            //Debug.Log("Not enough money");
+            WarningUI.instance.ShowWarning("Not enough gold!");
+            return;
+        }
+
+        PlayerStats.Gold -= cost;
+
         isPurchased = true;
         rend.material.color = purchasedColor;
+
+        nodeManager.RegisterPurchase();
     }
 
     

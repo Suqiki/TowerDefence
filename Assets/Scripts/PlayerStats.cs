@@ -17,8 +17,12 @@ public class PlayerStats : MonoBehaviour
 
     private int lastGold;
 
+    [HideInInspector]
+    public static int rounds;
+
     void Start()
     {
+        rounds = 0;
         Lives=startLives;
         Gold = startGold;
         lastGold = Gold;

@@ -167,7 +167,7 @@ GameObject:
   - component: {fileID: 8228757471724387515}
   - component: {fileID: 9028203507610210805}
   m_Layer: 0
-  m_Name: FireBall_Turret
+  m_Name: FireBall_Turret 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -183,7 +183,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -14.654054, y: 0.8500012, z: 25.48}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 530462847223548354}
@@ -203,14 +203,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21c3dd48eb88209459f1e5ff6d1741a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::turet
-  target: {fileID: 0}
-  range: 30
-  fireRate: 0.5
+  node: {fileID: 0}
+  range: 35
+  Arrow: {fileID: 6505639991509007226, guid: 2bd129f4d381caf4abb888929c1ec8f7, type: 3}
+  fireRate: 1
   fireCountdown: 0
+  damageOverTime: 30
+  slowPct: 0.5
+  useLaser: 0
+  LineRenderer: {fileID: 0}
+  impactEffectPrefab: {fileID: 0}
+  impactLight: {fileID: 0}
+  effectLight: {fileID: 0}
   enemyTag: Enemy
   PartToRotate: {fileID: 530462847223548354}
   rotateSpeed: 5
-  Arrow: {fileID: 6505639991509007226, guid: 9d62cda8e433e9842a70dfa470c0e6ec, type: 3}
   FirePoint: {fileID: 5749526640969620953}
 --- !u!1 &9170760359073045505
 GameObject:

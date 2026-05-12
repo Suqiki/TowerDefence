@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class turet : MonoBehaviour
 {
-    public Transform target;
-    
+    private Transform target;
+    private Enemy targetEnemy;
+    public Node node;
     [Header("General")]
     public float range = 15f;
     
@@ -15,9 +16,14 @@ public class turet : MonoBehaviour
 
     [Header("Use Laser")]
     public int damageOverTime = 30;
+    public float slowPct = .5f;
     public bool useLaser = false;
     public LineRenderer LineRenderer;
-    public ParticleSystem impactEffect;
+    public ParticleSystem impactEffectPrefab;
+    public Light impactLight;
+    public Light effectLight;
+    
+    private ParticleSystem impactEffect;
     
     [Header("Setup Fields")]
     public string enemyTag = "Enemy";
@@ -32,6 +38,18 @@ public class turet : MonoBehaviour
     void Start()
     {
         InvokeRepeating("UpdateTarget", 1f, 0.5f);
+
+        if (useLaser)
+        {
+            impactEffect = Instantiate(impactEffectPrefab, Vector3.zero, Quaternion.identity);
+            impactEffect.Stop();
+
+            impactLight = impactEffect.transform.Find("SnowLight").GetComponent<Light>();
+            effectLight = impactEffect.transform.Find("LaserGlow/GlowLight").GetComponent<Light>();
+
+            impactLight.enabled = false;
+            effectLight.enabled = false;
+        }
     }
 
     // Update is called once per frame
@@ -45,6 +63,8 @@ public class turet : MonoBehaviour
                 {
                     LineRenderer.enabled = false;
                     impactEffect.Stop();
+                    impactLight.enabled = false;
+                    effectLight.enabled = false;
                 }
             }
             return;
@@ -77,10 +97,15 @@ public class turet : MonoBehaviour
 
     void Laser()
     {
+        targetEnemy.TakeDamage(damageOverTime * Time.deltaTime);
+        targetEnemy.Slow(slowPct);
+        
         if (!LineRenderer.enabled)
         {
             LineRenderer.enabled = true;
             impactEffect.Play();
+            impactLight.enabled = true;
+            effectLight.enabled = true;
         }
 
         LineRenderer.SetPosition(0, FirePoint.position);
@@ -88,9 +113,9 @@ public class turet : MonoBehaviour
 
         Vector3 dir = FirePoint.position - target.position;
         
-        impactEffect.transform.position = target.position +  dir.normalized * 0.5f;
-        
-        impactEffect.transform.rotation = Quaternion.LookRotation(dir);
+        impactEffect.transform.position = target.position +  dir.normalized;
+
+        impactEffect.transform.rotation = Quaternion.LookRotation(dir) * Quaternion.Euler(90f, 0f, 0f);
         
         // distanța până la target
         float distance = Vector3.Distance(transform.position, target.position);
@@ -109,6 +134,31 @@ public class turet : MonoBehaviour
 
         LineRenderer.startWidth = width;
         LineRenderer.endWidth = width;
+    }
+    
+    void OnDisable()
+    {
+        StopLaserEffects();
+    }
+
+    void OnDestroy()
+    {
+        StopLaserEffects();
+    }
+    
+    private void StopLaserEffects()
+    {
+        if (LineRenderer != null)
+            LineRenderer.enabled = false;
+
+        if (impactEffect != null)
+            impactEffect.Stop();
+
+        if (impactLight != null)
+            impactLight.enabled = false;
+
+        if (effectLight != null)
+            effectLight.enabled = false;
     }
 
     private void Shoot()
@@ -139,6 +189,7 @@ public class turet : MonoBehaviour
         if (nearstEnemy != null && shortestDistance <= range)
         {
             target = nearstEnemy.transform;
+            targetEnemy = nearstEnemy.GetComponent<Enemy>();
         }
         else
         {
@@ -150,5 +201,18 @@ public class turet : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, range);
+    }
+    
+    public void SetNode(Node node)
+    {
+        this.node = node;
+    }
+
+    void OnMouseDown()
+    {
+        if (node != null)
+        {
+            BuildManager.instance.SelectNode(node);
+        }
     }
 }

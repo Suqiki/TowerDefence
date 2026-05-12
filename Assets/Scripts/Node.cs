@@ -12,6 +12,13 @@ public class Node : MonoBehaviour
     public GameObject turret;
     public bool isPurchased =  false;
     public bool turretBuild = false;
+    
+    [HideInInspector]
+    public TurretBlueprint turretBlueprint;
+    [HideInInspector]
+    public bool isUpgrade = false;
+    [HideInInspector]
+    public int currentUpgradeLevel = 0;
 
 
     
@@ -59,15 +66,19 @@ public class Node : MonoBehaviour
         {
             PurchaseNode();
         }
+        else if (turret != null)
+        {
+            buildManager.SelectNode(this);
+        }
         else
         {
-            BuildTurret();
+            BuildTurret(buildManager.GetTurretToBuild());
         }
     }
 
-    private void BuildTurret()
+    private void BuildTurret(TurretBlueprint blueprint)
     {
-        if(!buildManager.CanBuild)
+        if (!buildManager.CanBuild)
             return;
 
         if (!buildManager.HasMoney)
@@ -75,18 +86,160 @@ public class Node : MonoBehaviour
             WarningUI.instance.ShowWarning("Not enough gold!");
             return;
         }
-        
-        if (turretBuild == false && isPurchased == true)
+
+        if (!isPurchased || turretBuild)
         {
-            turretBuild = true;
-            //Debug.Log("Building Turret");
-            buildManager.BuildTurretOn(this);
-        }
-        else
-        {
-            Debug.Log("Can't Building Turret");
+            Debug.Log("Can't build turret");
             return;
         }
+
+        if (PlayerStats.Gold < blueprint.cost)
+            return;
+
+        PlayerStats.Gold -= blueprint.cost;
+
+        turretBuild = true;
+
+        SpawnTurret(blueprint);
+
+        Debug.Log("Turret build! Money left: " + PlayerStats.Gold);
+    }
+    
+    
+    private void SpawnTurret(TurretBlueprint blueprint)
+    {
+        GameObject _turret = Instantiate(
+            blueprint.prefab,
+            transform.position + offset,
+            Quaternion.identity
+        );
+        turret = _turret;
+
+        turretBlueprint = blueprint;
+
+
+        turet turretScript = turret.GetComponent<turet>();
+        if (turretScript != null)
+        {
+            turretScript.SetNode(this);
+        }
+
+        GameObject effect = Instantiate(
+            buildManager.buildEffect,
+            transform.position,
+            Quaternion.identity
+        );
+
+        Destroy(effect, 5f);
+    }
+
+    public void UpgradeTurret()
+    {
+        // mai există upgrade?
+        if (currentUpgradeLevel >= turretBlueprint.upgrades.Length)
+        {
+            Debug.Log("Max upgrade reached!");
+            return;
+        }
+
+        TurretUpgrade upgradeData =
+            turretBlueprint.upgrades[currentUpgradeLevel];
+
+        if (PlayerStats.Gold < upgradeData.cost)
+        {
+            Debug.Log("Not enough gold!");
+            return;
+        }
+
+        PlayerStats.Gold -= upgradeData.cost;
+
+        // distrugem tureta veche
+        Destroy(turret);
+
+        // spawn upgrade
+        GameObject _turret = Instantiate(
+            upgradeData.prefab,
+            transform.position + offset,
+            Quaternion.identity
+        );
+
+        turret = _turret;
+
+        // reconnect node
+        turet turretScript = turret.GetComponent<turet>();
+
+        if (turretScript != null)
+        {
+            turretScript.SetNode(this);
+        }
+
+        // efect
+        GameObject effect = Instantiate(
+            buildManager.buildEffect,
+            transform.position,
+            Quaternion.identity
+        );
+
+        Destroy(effect, 5f);
+
+        currentUpgradeLevel++;
+
+        Debug.Log("Turret upgraded! Current level: " + currentUpgradeLevel);
+    }
+
+    public void SellTurret()
+    {
+        if (turret == null)
+            return;
+
+        int totalSpent = GetTotalSpent();
+
+        int sellValue = Mathf.RoundToInt(totalSpent * 0.75f);
+
+        GameObject effect = Instantiate(
+            BuildManager.instance.sellEffect,
+            transform.position,
+            Quaternion.identity
+        );
+        
+        PlayerStats.Gold += sellValue;
+
+        Debug.Log("Sold turret for: " + sellValue);
+
+        Destroy(turret);
+        Destroy(effect, 5f);
+        turret = null;
+
+        turretBuild = false;
+        isUpgrade = false;
+        currentUpgradeLevel = 0;
+        turretBlueprint = null;
+    }
+    
+    private int GetTotalSpent()
+    {
+        int total = 0;
+
+        if (turretBlueprint != null)
+        {
+            total += turretBlueprint.cost;
+
+            for (int i = 0; i < currentUpgradeLevel; i++)
+            {
+                if (i < turretBlueprint.upgrades.Length)
+                {
+                    total += turretBlueprint.upgrades[i].cost;
+                }
+            }
+        }
+
+        return total;
+    }
+    
+    public int GetSellValue()
+    {
+        int total = GetTotalSpent();
+        return Mathf.RoundToInt(total * 0.75f);
     }
 
     private void PurchaseNode()

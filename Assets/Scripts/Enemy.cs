@@ -2,41 +2,51 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public float startSpeed = 10f;
+    [HideInInspector]
     public float speed = 10f;
-
-    public int health = 100;
+    public float slowRecoverSpeed = 5f;
+    private bool isSlowed = false;
+    
+    public float health = 100;
 
     public int value = 50;
     
     public GameObject deathEffect;
+    
+    [HideInInspector]
+    public float DoT = 0f;
+    [HideInInspector]
+    public float dotDuration = 0f;
 
-    private Transform target;
-    private int wavepointIndex = 0;
-   
-
+    [HideInInspector]
+    public bool isDead = false;
+    
     void Start()
     {
-        if (Waypoints.points == null || Waypoints.points.Length == 0)
-        {
-            Debug.LogError("Waypoints not set!");
-            return;
-        }
-
-        target = Waypoints.points[0];
+        speed=startSpeed;
     }
-
+    
     void Update()
     {
-        Vector3 dir = target.position - transform.position;
-        transform.Translate(dir.normalized * speed * Time.deltaTime, Space.World);
+        if (isDead)
+            return;
         
-        if (Vector3.Distance(transform.position, target.position) < 0.25f)
+        if (dotDuration > 0f)
         {
-            GetNextWaypoint();
+            TakeDamage(DoT * Time.deltaTime);
+            dotDuration -= Time.deltaTime;
         }
+        
+        if (!isSlowed)
+        {
+            speed = Mathf.MoveTowards(speed, startSpeed, slowRecoverSpeed * Time.deltaTime);
+        }
+        
+        isSlowed = false;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         health -= damage;
         if (health <= 0)
@@ -44,33 +54,31 @@ public class Enemy : MonoBehaviour
             Die();
         }
     }
+    
+    public void ApplyDoT(float damagePerSecond, float duration)
+    {
+        DoT = damagePerSecond;
+        dotDuration = duration;
+    }
+
+    public void Slow(float amount)
+    {
+        speed = startSpeed * (1f - amount);
+        isSlowed = true;
+    }
 
     void Die()
     {
+        if(isDead)
+            return;
+        
+        isDead = true;
         PlayerStats.Gold += value;
         GameObject effect = (GameObject)Instantiate(deathEffect, transform.position, Quaternion.identity);
+        EnemyCounter.instance.MinusEnemy();
         Destroy(gameObject);
         Destroy(effect, 5f);
-        EnemyCounter.instance.MinusEnemy();
     }
 
-    private void GetNextWaypoint()
-    {
-        if (wavepointIndex >= Waypoints.points.Length - 1)
-        {
-            EndPath();
-            EnemyCounter.instance.MinusEnemy();
-            //EnemyCounter.enemiesAlive--;
-            return;
-        }
-        
-        wavepointIndex++;
-        target = Waypoints.points[wavepointIndex];
-    }
     
-    void EndPath()
-    {
-        PlayerStats.Lives--;
-        Destroy(gameObject);
-    }
 }

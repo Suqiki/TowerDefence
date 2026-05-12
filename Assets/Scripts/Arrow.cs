@@ -11,6 +11,11 @@ public class Arrow : MonoBehaviour
 
     public float speed = 50f;
     [FormerlySerializedAs("effect")] public GameObject HitEffect;
+    
+    public bool isFireArrow = false;
+
+    public float DoT = 15f;
+    public float dotDuration = 3f;
 
     public void Seek(Transform _target)
     {
@@ -81,6 +86,11 @@ public class Arrow : MonoBehaviour
         if (e != null)
         {
             e.TakeDamage(amount);
+
+            if (isFireArrow)
+            {
+                e.ApplyDoT(DoT, dotDuration);
+            }
         }
     }
     

@@ -19,17 +19,46 @@ public class BuildManager : MonoBehaviour
     }
 
     public GameObject buildEffect;
+    public GameObject sellEffect;
     private TurretBlueprint turretToBuild;
+    private Node SelectedNode;
     
     public bool CanBuild {get {return turretToBuild != null;}}
     public bool HasMoney {get {return PlayerStats.Gold >= turretToBuild.cost;}}
 
+    public NodeUi nodeUI;
+
 
     public void SellectTurretToBuild(TurretBlueprint turretBlueprint)
     {
-        turretToBuild = turretBlueprint;    
+        turretToBuild = turretBlueprint;
+        DeselectNode();
     }
 
+    public TurretBlueprint GetTurretToBuild()
+    {
+        return turretToBuild;
+    }
+
+    public void SelectNode(Node node)
+    {
+        if (SelectedNode == node)
+        {
+            DeselectNode();
+            return;
+        }
+        
+        SelectedNode = node;
+        turretToBuild = null;
+        
+        nodeUI.SetTarget(node);
+    }
+
+    public void DeselectNode()
+    {
+        SelectedNode = null;
+        nodeUI.Hide();
+    }
     
     public void BuildTurretOn(Node node)
     {
@@ -41,6 +70,9 @@ public class BuildManager : MonoBehaviour
         PlayerStats.Gold -= turretToBuild.cost;
         GameObject turret = (GameObject)Instantiate(turretToBuild.prefab, node.transform.position + node.offset, Quaternion.identity );
         node.turret = turret;
+        
+        turet turretScript = turret.GetComponent<turet>();
+        turretScript.SetNode(node);
         
         GameObject effect = (GameObject)Instantiate(buildEffect, node.transform.position, Quaternion.identity);
         Destroy(effect, 5f);

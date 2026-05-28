@@ -64,6 +64,8 @@ MonoBehaviour:
   damage: 90
   speed: 100
   HitEffect: {fileID: 5463929403031147838, guid: 2d21f5edb35074f4d92ad85db7a814c4, type: 3}
+  HitSoundFX: {fileID: 8300000, guid: 49709c6420ccf8f47b14ff9523df7301, type: 3}
+  HitSoundFXVolume: 0.13
   isFireArrow: 1
   DoT: 15
   dotDuration: 3

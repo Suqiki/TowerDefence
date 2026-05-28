@@ -269,6 +269,9 @@ MonoBehaviour:
   Arrow: {fileID: 1225370512109555040, guid: 4d7afa792422fb848bb4046889daa5e1, type: 3}
   fireRate: 1.5
   fireCountdown: 0
+  shootSoundFX:
+  - {fileID: 8300000, guid: 3647afafdef7b39488f97ac3a46ada76, type: 3}
+  shootSoundFXPower: 1
   damageOverTime: 30
   slowPct: 0.5
   useLaser: 0
@@ -276,6 +279,8 @@ MonoBehaviour:
   impactEffectPrefab: {fileID: 0}
   impactLight: {fileID: 0}
   effectLight: {fileID: 0}
+  laserSound: {fileID: 0}
+  laserVolume: 0.5
   enemyTag: Enemy
   PartToRotate: {fileID: 7608723909305205421}
   rotateSpeed: 5

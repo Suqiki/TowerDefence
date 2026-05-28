@@ -24,13 +24,21 @@ public class EnemyCounter : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
         enemyTextColorOrigin = enemyText.color;
         enemiesAlive = 0;
         Refresh();
     }
 
-    private void Refresh()
+    public void Refresh()
     {
         enemyText.text = "Enemies Alive: " + enemiesAlive;
     }

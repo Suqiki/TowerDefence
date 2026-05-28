@@ -101,9 +101,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0.6679245, g: 0.62885725, b: 0.62885725, a: 1}
+    m_PressedColor: {r: 0.5396226, g: 0.5080598, b: 0.5080598, a: 1}
+    m_SelectedColor: {r: 0.4566037, g: 0.2729683, b: 0.25070125, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -157,12 +157,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   standardCostText: {fileID: 0}
   fireCostText: {fileID: 0}
+  iceCostText: {fileID: 0}
   standardTurret:
     prefab: {fileID: 0}
     cost: 0
+    upgrades: []
   fireTurret:
     prefab: {fileID: 0}
     cost: 0
+    upgrades: []
+  iceTurret:
+    prefab: {fileID: 0}
+    cost: 0
+    upgrades: []
 --- !u!1 &6934501434005803026
 GameObject:
   m_ObjectHideFlags: 0

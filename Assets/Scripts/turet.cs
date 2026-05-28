@@ -13,6 +13,8 @@ public class turet : MonoBehaviour
     public GameObject Arrow;
     public float fireRate = 1f;
     public float fireCountdown = 0f;
+    public AudioClip[] shootSoundFX;
+    public float shootSoundFXPower=1f;
 
     [Header("Use Laser")]
     public int damageOverTime = 30;
@@ -22,6 +24,8 @@ public class turet : MonoBehaviour
     public ParticleSystem impactEffectPrefab;
     public Light impactLight;
     public Light effectLight;
+    public AudioSource laserSound;
+    public float laserVolume = 0.5f;
     
     private ParticleSystem impactEffect;
     
@@ -59,6 +63,11 @@ public class turet : MonoBehaviour
         {
             if (useLaser)
             {
+                if (laserSound.isPlaying)
+                {
+                    laserSound.Stop();
+                }
+                
                 if (LineRenderer.enabled)
                 {
                     LineRenderer.enabled = false;
@@ -99,6 +108,12 @@ public class turet : MonoBehaviour
     {
         targetEnemy.TakeDamage(damageOverTime * Time.deltaTime);
         targetEnemy.Slow(slowPct);
+        
+        if (!laserSound.isPlaying)
+        {
+            laserSound.volume = laserVolume;
+            laserSound.Play();
+        }
         
         if (!LineRenderer.enabled)
         {
@@ -164,6 +179,7 @@ public class turet : MonoBehaviour
     private void Shoot()
     {
         Debug.Log("shoot");
+        SoundEffectsManager.instance.PlayrandomSoundEffect(shootSoundFX, transform, shootSoundFXPower);
         GameObject ArrowGo = (GameObject)Instantiate(Arrow, FirePoint.position, FirePoint.rotation);
         Arrow arrow = ArrowGo.GetComponent<Arrow>();
         

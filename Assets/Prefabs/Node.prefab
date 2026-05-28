@@ -128,3 +128,26 @@ MonoBehaviour:
   hoverColor: {r: 0, g: 0.87169814, b: 0.4631079, a: 0}
   purchasedColor: {r: 0.27768475, g: 0.87169814, b: 0.09703802, a: 0}
   offset: {x: 0, y: 0.7, z: 0}
+  nodeBuySoundFX: {fileID: 8300000, guid: 1fe51255051a57a488df3fa6a66c0a66, type: 3}
+  nodeBuySoundFXVolume: 1
+  buildSoundFX: {fileID: 8300000, guid: 99f5523ff3cf23441b33f712f8caf787, type: 3}
+  buildSoundFXVolume: 1
+  upgradeSoundFX:
+  - {fileID: 8300000, guid: c92c5f225ee0e8949b27873aa99bf663, type: 3}
+  - {fileID: 8300000, guid: 0134d9274390bce4a89c032f8530bf45, type: 3}
+  upgradeSoundFXVolume: 1
+  sellSoundFX: {fileID: 8300000, guid: d4ccf5bdc4d75b047a8b86dec54fc393, type: 3}
+  sellSoundFXVolume: 1
+  highlightAnimColor: {r: 0.65163124, g: 0.93962264, b: 0.57972944, a: 0}
+  animSpeed: 2
+  tutorialMode: 0
+  tutorialCanBuild: 0
+  turret: {fileID: 0}
+  isPurchased: 0
+  turretBuild: 0
+  turretBlueprint:
+    prefab: {fileID: 0}
+    cost: 0
+    upgrades: []
+  isUpgrade: 0
+  currentUpgradeLevel: 0

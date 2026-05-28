@@ -8,7 +8,7 @@ public class PlayerStats : MonoBehaviour
     public int startGold = 400;
 
     public static int Lives;
-    public int startLives = 20;
+    public int startLives = 10;
 
     public TextMeshProUGUI goldNrText;
 

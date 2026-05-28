@@ -51,9 +51,22 @@ public class EnemyMovement : MonoBehaviour
 
         _enemy.isDead = true;
 
-        PlayerStats.Lives = Mathf.Max(0, PlayerStats.Lives - 1);
+        if (_enemy.doubleBaseDmg == false)
+        {
+            PlayerStats.Lives = Mathf.Max(0, PlayerStats.Lives - 1);
+            PlayerProgressManager.instance.livesLost++;
+
+        }
+        else
+        {
+            PlayerStats.Lives = Mathf.Max(0, PlayerStats.Lives - 2);
+            PlayerProgressManager.instance.livesLost++;
+            PlayerProgressManager.instance.livesLost++;
+        }
         
         EnemyCounter.instance.MinusEnemy();
+        
+        PlayerProgressManager.instance.enemiesEscaped++;
 
         Destroy(gameObject);
     }

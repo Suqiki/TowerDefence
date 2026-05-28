@@ -11,6 +11,8 @@ public class Arrow : MonoBehaviour
 
     public float speed = 50f;
     [FormerlySerializedAs("effect")] public GameObject HitEffect;
+    public AudioClip HitSoundFX;
+    public float HitSoundFXVolume = 1f;
     
     public bool isFireArrow = false;
 
@@ -53,6 +55,8 @@ public class Arrow : MonoBehaviour
     {
         GameObject effectIns = (GameObject)Instantiate(HitEffect, transform.position, transform.rotation);
         Destroy(effectIns, 2f);
+
+        SoundEffectsManager.instance.PlaySoundEffect(HitSoundFX, transform, HitSoundFXVolume);
 
         // ținta principala ia damage complet
         Damage(target, damage);

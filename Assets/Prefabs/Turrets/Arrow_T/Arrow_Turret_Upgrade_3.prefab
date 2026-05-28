@@ -271,6 +271,9 @@ MonoBehaviour:
   Arrow: {fileID: 1225370512109555040, guid: e565291a898b2c94289550a5a98135f1, type: 3}
   fireRate: 2.5
   fireCountdown: 0
+  shootSoundFX:
+  - {fileID: 8300000, guid: 96e66e8a09415e54588b2fdee374813c, type: 3}
+  shootSoundFXPower: 0.2
   damageOverTime: 30
   slowPct: 0.5
   useLaser: 0

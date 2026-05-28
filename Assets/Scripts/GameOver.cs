@@ -1,23 +1,35 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 public class GameOver : MonoBehaviour
 {
-    public TextMeshProUGUI roundText;
+    public SceneFader sceneFader;
 
-    void OnEnable()
+    public string menuSceneName = "MainMenu";
+    
+    
+    private void Start()
     {
-        roundText.text = "Rounds: " + PlayerStats.rounds.ToString();
+        // automat la spawn UI GameOver
+        StartCoroutine(SaveAndShowGameOver());
     }
 
+    IEnumerator SaveAndShowGameOver()
+    {
+        yield return PlayerProgressManager.instance.SaveOnGameOver();
+
+        // după save arată UI / sau rămâi pe ecran
+        Debug.Log("Game Over stats saved");
+    }
     public void Retry()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        sceneFader.FadeTo(SceneManager.GetActiveScene().name);
     }
 
     public void Menu()
     {
-        Debug.Log("Menu");
+        sceneFader.FadeTo(menuSceneName);
     }
 }

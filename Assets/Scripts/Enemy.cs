@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
@@ -7,12 +8,21 @@ public class Enemy : MonoBehaviour
     public float speed = 10f;
     public float slowRecoverSpeed = 5f;
     private bool isSlowed = false;
+    public bool doubleBaseDmg = false;
     
-    public float health = 100;
+    public float startHealth = 100;
+    private float health;
 
     public int value = 50;
     
     public GameObject deathEffect;
+    
+    [Header("Health")]
+    public Image healthBar;
+    
+    [Header("DoT Effect")]
+    public GameObject dotEffectPrefab;
+    private GameObject activeDotEffect;
     
     [HideInInspector]
     public float DoT = 0f;
@@ -22,8 +32,13 @@ public class Enemy : MonoBehaviour
     [HideInInspector]
     public bool isDead = false;
     
+    [Header("Sound Effects")]
+    public AudioClip deathSound;
+    public float deathSoundPower = 1;
+    
     void Start()
     {
+        health = startHealth;
         speed=startSpeed;
     }
     
@@ -35,7 +50,19 @@ public class Enemy : MonoBehaviour
         if (dotDuration > 0f)
         {
             TakeDamage(DoT * Time.deltaTime);
+
             dotDuration -= Time.deltaTime;
+        }
+        else
+        {
+            DoT = 0f;
+
+            if (activeDotEffect != null)
+            {
+                Destroy(activeDotEffect);
+
+                activeDotEffect = null;
+            }
         }
         
         if (!isSlowed)
@@ -49,8 +76,12 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
-        if (health <= 0)
+        
+        healthBar.fillAmount = health / startHealth;
+        
+        if (health <= 0 && !isDead)
         {
+            SoundEffectsManager.instance.PlaySoundEffect(deathSound, transform, deathSoundPower);
             Die();
         }
     }
@@ -59,6 +90,17 @@ public class Enemy : MonoBehaviour
     {
         DoT = damagePerSecond;
         dotDuration = duration;
+
+        // dacă nu există deja efect activ
+        if (activeDotEffect == null)
+        {
+            activeDotEffect = Instantiate(
+                dotEffectPrefab,
+                transform.position,
+                Quaternion.identity,
+                transform
+            );
+        }
     }
 
     public void Slow(float amount)
@@ -76,6 +118,14 @@ public class Enemy : MonoBehaviour
         PlayerStats.Gold += value;
         GameObject effect = (GameObject)Instantiate(deathEffect, transform.position, Quaternion.identity);
         EnemyCounter.instance.MinusEnemy();
+        
+        PlayerProgressManager.instance.enemiesKilled++;
+        PlayerProgressManager.instance.goldEarned += value;
+        
+        if (activeDotEffect != null)
+        {
+            Destroy(activeDotEffect);
+        }
         Destroy(gameObject);
         Destroy(effect, 5f);
     }

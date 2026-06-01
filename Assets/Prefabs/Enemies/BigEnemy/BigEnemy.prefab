@@ -27,16 +27,16 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1126318901104989482}
   m_LocalRotation: {x: 0.30065295, y: -0, z: -0, w: 0.9537336}
-  m_LocalPosition: {x: 0, y: 0, z: 0.71}
-  m_LocalScale: {x: 0.017924417, y: 0.0068556597, z: 0.01224225}
+  m_LocalPosition: {x: 0, y: 0, z: 1.5201262}
+  m_LocalScale: {x: 0.05377325, y: 0.02056698, z: 0.03672675}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5930326586926533771}
-  m_Father: {fileID: 5390049692541085602}
+  m_Father: {fileID: 8682182921903914420}
   m_LocalEulerAnglesHint: {x: 34.994, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1.18}
+  m_AnchoredPosition: {x: 0, y: 2.0987797}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &4253618249195840397
@@ -253,6 +253,51 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &5982620948788706583
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8682182921903914420}
+  - component: {fileID: 132423658843050871}
+  m_Layer: 0
+  m_Name: RotatePart
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8682182921903914420
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5982620948788706583}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.1470733, z: 0.20329031}
+  m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1475243577730289732}
+  m_Father: {fileID: 5390049692541085602}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &132423658843050871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5982620948788706583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9f88d222def3d84e90dee77b3e1aff8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameAssembly::Billboard
 --- !u!1 &8798323387100350239
 GameObject:
   m_ObjectHideFlags: 0
@@ -287,7 +332,7 @@ Transform:
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1475243577730289732}
+  - {fileID: 8682182921903914420}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &600660405240516446
@@ -384,8 +429,8 @@ MonoBehaviour:
   speed: 10
   slowRecoverSpeed: 5
   doubleBaseDmg: 1
-  startHealth: 300
-  value: 120
+  startHealth: 450
+  value: 130
   deathEffect: {fileID: 5033389084737901228, guid: 569036399b2524f4c8f65aaceeb681f6, type: 3}
   healthBar: {fileID: 220596235709762246}
   dotEffectPrefab: {fileID: 7994961545003032391, guid: 5f3c9dc9390a2914d9b740c3f3beebc1, type: 3}

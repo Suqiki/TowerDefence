@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     
     public float startHealth = 100;
     private float health;
+    private bool isHealthInitialized = false;
 
     public int value = 50;
     
@@ -38,8 +39,14 @@ public class Enemy : MonoBehaviour
     
     void Start()
     {
-        health = startHealth;
+        Initializehealth();
         speed=startSpeed;
+    }
+
+    public void Initializehealth()
+    {
+        health = startHealth;
+        isHealthInitialized = true;
     }
     
     void Update()
@@ -75,13 +82,21 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        if (!isHealthInitialized)
+        {
+            Initializehealth();
+        }
+        
         health -= damage;
         
         healthBar.fillAmount = health / startHealth;
         
         if (health <= 0 && !isDead)
         {
-            SoundEffectsManager.instance.PlaySoundEffect(deathSound, transform, deathSoundPower);
+            if (SoundEffectsManager.instance != null && deathSound != null)
+            {
+                SoundEffectsManager.instance.PlaySoundEffect(deathSound, transform, deathSoundPower);
+            }
             Die();
         }
     }
@@ -116,19 +131,41 @@ public class Enemy : MonoBehaviour
         
         isDead = true;
         PlayerStats.Gold += value;
-        GameObject effect = (GameObject)Instantiate(deathEffect, transform.position, Quaternion.identity);
-        EnemyCounter.instance.MinusEnemy();
+
+        if (deathEffect != null)
+        {
+            GameObject effect = (GameObject)Instantiate(deathEffect, transform.position, Quaternion.identity);
+            if (Application.isPlaying) Destroy(effect, 5f);
+        }
+
+        // Verificări de siguranță pentru Singletons în timpul testării
+        EnemyCounter.instance?.MinusEnemy();
         
-        PlayerProgressManager.instance.enemiesKilled++;
-        PlayerProgressManager.instance.goldEarned += value;
+        if (PlayerProgressManager.instance != null)
+        {
+            PlayerProgressManager.instance.enemiesKilled++;
+            PlayerProgressManager.instance.goldEarned += value;
+        }
+
+        if (AnalyticsManager.Instance != null)
+        {
+            AnalyticsManager.Instance.EnemyKilled(gameObject.name);
+        }
         
         if (activeDotEffect != null)
         {
             Destroy(activeDotEffect);
         }
-        Destroy(gameObject);
-        Destroy(effect, 5f);
-    }
 
+        // În EditMode nu poți folosi Destroy normal pe un GameObject, verificăm dacă jocul rulează efectiv
+        if (Application.isPlaying)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            DestroyImmediate(gameObject);
+        }
+    }
     
 }

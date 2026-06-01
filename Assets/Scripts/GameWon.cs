@@ -32,6 +32,16 @@ public class GameWon : MonoBehaviour
     
     IEnumerator SaveAndContinue()
     {
+        SendLevelCompletedAnalytics();
+        
+        yield return supabase.UpdateLevelReached(levelToReached-1);
+        
+        if (levelToReached > PlayerPrefs.GetInt("LevelReached", 2))
+        {
+            PlayerPrefs.SetInt("LevelReached", levelToReached);
+            PlayerPrefs.Save();
+        }
+        
         yield return PlayerProgressManager.instance.SaveOnGameOver();
 
         sceneFader.FadeTo(nextLevel);
@@ -39,6 +49,16 @@ public class GameWon : MonoBehaviour
     
     IEnumerator SaveAndGoMenu()
     {
+        SendLevelCompletedAnalytics();
+        
+        yield return supabase.UpdateLevelReached(levelToReached-1);
+        
+        if (levelToReached > PlayerPrefs.GetInt("LevelReached", 2))
+        {
+            PlayerPrefs.SetInt("LevelReached", levelToReached);
+            PlayerPrefs.Save();
+        }
+        
         yield return PlayerProgressManager.instance.SaveOnGameOver();
 
         sceneFader.FadeTo(menuSceneName);
@@ -50,5 +70,16 @@ public class GameWon : MonoBehaviour
         StarRating rating = gm.CalculateStars();
 
         starUI.Show(rating);
+    }
+    
+    void SendLevelCompletedAnalytics()
+    {
+        if (AnalyticsManager.Instance == null)
+            return;
+
+        AnalyticsManager.Instance.LevelCompleted(
+            SceneManager.GetActiveScene().name,
+            (int)FindFirstObjectByType<GameManager>().CalculateStars()
+        );
     }
 }

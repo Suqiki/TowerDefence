@@ -1,7 +1,6 @@
 using System;
 using DG.Tweening;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 
 public class EnemyCounter : MonoBehaviour
@@ -55,9 +54,14 @@ public class EnemyCounter : MonoBehaviour
         
         Refresh();
 
-        var sequence = DOTween.Sequence();
-        sequence.Append(enemyText.DOColor(colorMinus, 0.3f));
-        sequence.Append(enemyText.DOColor(enemyTextColorOrigin, 0.3f));
+        if (enemyText != null)
+        {
+            DOTween.Kill(enemyText);
+            var sequence = DOTween.Sequence();
+            // Folosim DOTween.To pentru a evita erorile de module TMP în Script Assembly
+            sequence.Append(DOTween.To(() => enemyText.color, x => enemyText.color = x, colorMinus, 0.3f));
+            sequence.Append(DOTween.To(() => enemyText.color, x => enemyText.color = x, enemyTextColorOrigin, 0.3f));
+        }
     }
     
     public void PlusEnemy()
@@ -66,8 +70,13 @@ public class EnemyCounter : MonoBehaviour
         
         Refresh();
         
-        var sequence = DOTween.Sequence();
-        sequence.Append(enemyText.DOColor(colorPlus, 0.3f));
-        sequence.Append(enemyText.DOColor(enemyTextColorOrigin,  0.3f));
+        if (enemyText != null)
+        {
+            DOTween.Kill(enemyText);
+            var sequence = DOTween.Sequence();
+            // Folosim DOTween.To pentru a evita erorile de module TMP în Script Assembly
+            sequence.Append(DOTween.To(() => enemyText.color, x => enemyText.color = x, colorPlus, 0.3f));
+            sequence.Append(DOTween.To(() => enemyText.color, x => enemyText.color = x, enemyTextColorOrigin, 0.3f));
+        }
     }
 }

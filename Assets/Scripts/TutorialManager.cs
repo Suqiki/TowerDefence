@@ -288,6 +288,23 @@ public class TutorialManager : MonoBehaviour
         tutoriaUI.SetActive(false);
         tutorialEnabled = false;
         Time.timeScale = 1f; // Ne asigurăm că jocul continuă normal
+        
+        StartCoroutine(SaveTutorialCompleted());
+
+    }
+    IEnumerator SaveTutorialCompleted()
+    {
+        SupabaseManager supabaseManager = FindFirstObjectByType<SupabaseManager>();
+
+        if (supabaseManager != null)
+        {
+            yield return supabaseManager.SetTutorialCompleted(true);
+        }
+        else
+        {
+            Debug.LogError("SupabaseManager not found in scene!");
+        }
+        
     }
     
     IEnumerator TypeText(string text)

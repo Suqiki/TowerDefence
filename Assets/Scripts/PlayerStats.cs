@@ -43,11 +43,14 @@ public class PlayerStats : MonoBehaviour
 
     public void MinusGold()
     {
-        goldNrText.DOKill();
+        // Oprim orice animație activă pe această componentă text
+        DOTween.Kill(goldNrText);
 
         var sequence = DOTween.Sequence();
-        sequence.Append(goldNrText.DOColor(colorMinus, 0.3f));
-        sequence.Append(goldNrText.DOColor(goldTextColorOrigin, 0.3f));
+    
+        // Animăm valoarea culorii direct prin proprietatea .color, pas cu pas
+        sequence.Append(DOTween.To(() => goldNrText.color, x => goldNrText.color = x, colorMinus, 0.3f));
+        sequence.Append(DOTween.To(() => goldNrText.color, x => goldNrText.color = x, goldTextColorOrigin, 0.3f));
     }
     
 }

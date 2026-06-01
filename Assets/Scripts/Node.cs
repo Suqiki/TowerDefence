@@ -139,6 +139,13 @@ public class Node : MonoBehaviour
                 0
             )
         );
+        
+        if (AnalyticsManager.Instance != null)
+        {
+            AnalyticsManager.Instance.TurretBought(
+                blueprint.prefab.name
+            );
+        }
 
         Debug.Log("Turret build! Money left: " + PlayerStats.Gold);
     }
@@ -146,6 +153,8 @@ public class Node : MonoBehaviour
     
     private void SpawnTurret(TurretBlueprint blueprint)
     {
+        
+        
         GameObject _turret = Instantiate(
             blueprint.prefab,
             transform.position + offset,
@@ -227,6 +236,8 @@ public class Node : MonoBehaviour
         Destroy(effect, 5f);
 
         currentUpgradeLevel++;
+
+        
             
         int up1 = 0;
         int up2 = 0;
@@ -248,6 +259,14 @@ public class Node : MonoBehaviour
                 up3
             )
         );
+        
+        if (AnalyticsManager.Instance != null)
+        {
+            AnalyticsManager.Instance.TurretUpgraded(
+                turret.name,
+                currentUpgradeLevel
+            );
+        }
 
         Debug.Log("Turret upgraded! Current level: " + currentUpgradeLevel);
     }

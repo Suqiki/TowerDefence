@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0a05eb174a37f348be8e40233db627e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arrow
-  explosionRadius: 10
+  explosionRadius: 6
   damage: 70
   speed: 40
   HitEffect: {fileID: 5715249845805366945, guid: ae6c822bdad86dd46850afe35474ceb5, type: 3}

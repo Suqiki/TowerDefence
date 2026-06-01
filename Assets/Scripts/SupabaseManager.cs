@@ -149,6 +149,34 @@ public class SupabaseManager : MonoBehaviour
             Debug.Log("Player stats created!");
         }
     }
+    
+    public IEnumerator UpdateLevelReached(int level)
+    {
+        string url = $"{supabaseUrl}/rest/v1/players?uid=eq.{playerUID}";
+
+        string json =
+            "{"
+            + "\"level_reached\":" + level +
+            "}";
+
+        UnityWebRequest request = new UnityWebRequest(url, "PATCH");
+
+        byte[] body = Encoding.UTF8.GetBytes(json);
+
+        request.uploadHandler = new UploadHandlerRaw(body);
+        request.downloadHandler = new DownloadHandlerBuffer();
+
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("apikey", supabaseKey);
+        request.SetRequestHeader("Authorization", "Bearer " + supabaseKey);
+
+        yield return request.SendWebRequest();
+
+        if (request.result != UnityWebRequest.Result.Success)
+            Debug.LogError("Level update error: " + request.error);
+        else
+            Debug.Log("Level reached updated in Supabase!");
+    }
 
     [Serializable]
     public class PlayerData

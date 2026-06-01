@@ -18,6 +18,13 @@ public class GameOver : MonoBehaviour
 
     IEnumerator SaveAndShowGameOver()
     {
+        if (AnalyticsManager.Instance != null)
+        {
+            AnalyticsManager.Instance.LevelFailed(
+                SceneManager.GetActiveScene().name
+            );
+        }
+        
         yield return PlayerProgressManager.instance.SaveOnGameOver();
 
         // după save arată UI / sau rămâi pe ecran

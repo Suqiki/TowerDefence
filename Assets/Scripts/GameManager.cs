@@ -19,7 +19,10 @@ public class GameManager : MonoBehaviour
     
     private void Start()
     {
-        PlayerProgressManager.instance.ResetLevelStats();
+        if (PlayerProgressManager.instance != null)
+        {
+            PlayerProgressManager.instance.ResetLevelStats();
+        }
         gameIsOver = false;
        // gameOverUI.SetActive(false);
     }
@@ -37,18 +40,31 @@ public class GameManager : MonoBehaviour
 
     void EndGame()
     {
-        SoundEffectsManager.instance.PlayrandomSoundEffect(gameOverSound, transform, gameOverVolume );
+        if (SoundEffectsManager.instance != null && gameOverSound != null)
+        {
+            SoundEffectsManager.instance.PlayrandomSoundEffect(gameOverSound, transform, gameOverVolume);
+        }
         gameIsOver = true;
         //Debug.Log("Game End");
         //gameUI.SetActive(false);
-        gameOverUI.SetActive(true);
+        if (gameOverUI != null)
+        {
+            gameOverUI.SetActive(true);
+        }
+        
     }
 
     public void WinLevel()
     {
-        SoundEffectsManager.instance.PlaySoundEffect(gameWonSound, transform, gameWonVolume );
+        if (SoundEffectsManager.instance != null && gameWonSound != null)
+        {
+            SoundEffectsManager.instance.PlaySoundEffect(gameWonSound, transform, gameWonVolume);
+        }
         gameIsOver = true;
-        gameWonUI.SetActive(true);
+        if (gameWonUI != null)
+        {
+            gameWonUI.SetActive(true);
+        }
     }
     
     public StarRating CalculateStars()

@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::turet
   node: {fileID: 0}
-  range: 35
+  range: 30
   Arrow: {fileID: 6505639991509007226, guid: 8649ae85ce84ae948b6a7772f35e4650, type: 3}
   fireRate: 1.5
   fireCountdown: 0
@@ -221,6 +221,8 @@ MonoBehaviour:
   impactEffectPrefab: {fileID: 0}
   impactLight: {fileID: 0}
   effectLight: {fileID: 0}
+  laserSound: {fileID: 0}
+  laserVolume: 0.5
   enemyTag: Enemy
   PartToRotate: {fileID: 530462847223548354}
   rotateSpeed: 5

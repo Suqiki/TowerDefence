@@ -15,18 +15,27 @@ public class WarningUI : MonoBehaviour
 
     public void ShowWarning(string message)
     {
-        warningText.DOKill();
+        if (warningText == null) return;
+
+        // Oprim orice animație DOTween activă direct pe componentă sau pe text
+        DOTween.Kill(warningText);
     
         warningText.gameObject.SetActive(true);
-        warningText.alpha = 1;
+        warningText.alpha = 1f;
         warningText.text = message;
 
         Sequence seq = DOTween.Sequence();
         seq.AppendInterval(1f);
-        seq.Append(warningText.DOFade(0, 0.5f));
+        
+        // Înlocuim DOFade cu o metodă generică DOTween.To pentru a modifica alpha-ul textului
+        seq.Append(DOTween.To(() => warningText.alpha, x => warningText.alpha = x, 0f, 0.5f));
+        
         seq.OnComplete(() =>
         {
-            warningText.gameObject.SetActive(false);
+            if (warningText != null)
+            {
+                warningText.gameObject.SetActive(false);
+            }
         });
     }
 }

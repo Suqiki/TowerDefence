@@ -149,7 +149,7 @@ MonoBehaviour:
   fireCountdown: 0
   shootSoundFX: []
   shootSoundFXPower: 1
-  damageOverTime: 40
+  damageOverTime: 25
   slowPct: 0.65
   useLaser: 1
   LineRenderer: {fileID: 3031186549334232231}
@@ -157,6 +157,7 @@ MonoBehaviour:
   impactLight: {fileID: 0}
   effectLight: {fileID: 0}
   laserSound: {fileID: -6367125674626560681, guid: adb188e53e0923f4d875959f9737aed7, type: 3}
+  laserVolume: 0.5
   enemyTag: Enemy
   PartToRotate: {fileID: 118109403770221295}
   rotateSpeed: 5

@@ -25,7 +25,7 @@ public class SceneFader : MonoBehaviour
       float t = 1f;
       while (t > 0f)
       {
-         t -= Time.deltaTime *  speed;
+         t -= Time.unscaledDeltaTime *  speed;
          float alpha = curve.Evaluate(t);
          Image.color =new Color(Image.color.r,Image.color.g,Image.color.b,alpha);
          yield return 0;
@@ -35,12 +35,12 @@ public class SceneFader : MonoBehaviour
       float t = 0f;
       while (t < 1f)
       {
-         t += Time.deltaTime *  speed;
+         t += Time.unscaledDeltaTime *  speed;
          float alpha = curve.Evaluate(t);
          Image.color =new Color(Image.color.r,Image.color.g,Image.color.b,alpha);
          yield return 0;
       }
-      
+      Time.timeScale = 1f;
       SceneManager.LoadScene(scene);
    }
 }

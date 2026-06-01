@@ -266,9 +266,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   node: {fileID: 0}
-  range: 30
+  range: 22
   Arrow: {fileID: 1225370512109555040, guid: a1b6291b6dda3754e9a02a3e022fcd3e, type: 3}
-  fireRate: 2
+  fireRate: 1.8
   fireCountdown: 0
   shootSoundFX:
   - {fileID: 8300000, guid: 3647afafdef7b39488f97ac3a46ada76, type: 3}

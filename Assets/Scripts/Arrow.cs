@@ -82,7 +82,6 @@ public class Arrow : MonoBehaviour
             }
         }
     }
-
     void Damage(Transform enemy, int amount)
     {
         Enemy e = enemy.GetComponent<Enemy>();

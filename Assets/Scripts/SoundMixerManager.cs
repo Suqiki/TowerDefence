@@ -9,18 +9,7 @@ public class SoundMixerManager : MonoBehaviour
 
     private void Awake()
     {
-        // singleton
-        
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+        instance = this;
     }
     
     private void Start()

@@ -11,16 +11,8 @@ public class AnalyticsManager : MonoBehaviour
 
     async void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
         Instance = this;
-
-        DontDestroyOnLoad(gameObject);
-
+        
         try
         {
             await UnityServices.InitializeAsync();

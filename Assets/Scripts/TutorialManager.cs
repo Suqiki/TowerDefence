@@ -175,8 +175,6 @@ public class TutorialManager : MonoBehaviour
             
             case 3:
                 spawnHighlight.SetActive(true);
-                
-
                 StartTyping(
                     "Enemies will spawn from this cave...");
                 break;
@@ -193,7 +191,6 @@ public class TutorialManager : MonoBehaviour
                 Time.timeScale = 1f;
                 PlayerStats.Gold = 10;
                 
-                // REPARAT: Dezactivăm tutorialMode doar pentru acest nod ca să poată fi cumpărat
                 if (nodeToBuy != null)
                 {
                     nodeToBuy.tutorialMode = false; 

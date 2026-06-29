@@ -167,5 +167,4 @@ public class Enemy : MonoBehaviour
             DestroyImmediate(gameObject);
         }
     }
-    
 }

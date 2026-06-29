@@ -17,6 +17,7 @@ public class Node : MonoBehaviour
     public AudioClip buildSoundFX;
     public float buildSoundFXVolume;
     public AudioClip[] upgradeSoundFX;
+    
     public float upgradeSoundFXVolume;
     public AudioClip sellSoundFX;
     public float sellSoundFXVolume;
@@ -108,28 +109,21 @@ public class Node : MonoBehaviour
     {
         if (!buildManager.CanBuild)
             return;
-
         if (!buildManager.HasMoney)
         {
             WarningUI.instance.ShowWarning("Not enough gold!");
             return;
         }
-
         if (!isPurchased || turretBuild)
         {
             Debug.Log("Can't build turret");
             return;
         }
-
         if (PlayerStats.Gold < blueprint.cost)
             return;
-
         PlayerStats.Gold -= blueprint.cost;
-
         turretBuild = true;
-
         SpawnTurret(blueprint);
-        
         StartCoroutine(
             PlayerProgressManager.instance.UpdateTurretStats(
                 blueprint.prefab.name,
@@ -139,22 +133,18 @@ public class Node : MonoBehaviour
                 0
             )
         );
-        
         if (AnalyticsManager.Instance != null)
         {
             AnalyticsManager.Instance.TurretBought(
                 blueprint.prefab.name
             );
         }
-
         Debug.Log("Turret build! Money left: " + PlayerStats.Gold);
     }
     
     
     private void SpawnTurret(TurretBlueprint blueprint)
     {
-        
-        
         GameObject _turret = Instantiate(
             blueprint.prefab,
             transform.position + offset,
@@ -165,8 +155,7 @@ public class Node : MonoBehaviour
         SoundEffectsManager.instance.PlaySoundEffect(buildSoundFX, transform, buildSoundFXVolume);
 
         turretBlueprint = blueprint;
-
-
+        
         turet turretScript = turret.GetComponent<turet>();
         if (turretScript != null)
         {
@@ -192,8 +181,7 @@ public class Node : MonoBehaviour
             return;
         }
 
-        TurretUpgrade upgradeData =
-            turretBlueprint.upgrades[currentUpgradeLevel];
+        TurretUpgrade upgradeData =  turretBlueprint.upgrades[currentUpgradeLevel];
 
         if (PlayerStats.Gold < upgradeData.cost)
         {
@@ -203,46 +191,27 @@ public class Node : MonoBehaviour
         }
 
         PlayerStats.Gold -= upgradeData.cost;
-
         // distrugem tureta veche
         Destroy(turret);
-
         SoundEffectsManager.instance.PlayrandomSoundEffect(upgradeSoundFX, transform, upgradeSoundFXVolume);
-        
         // spawn upgrade
-        GameObject _turret = Instantiate(
-            upgradeData.prefab,
-            transform.position + offset,
-            Quaternion.identity
-        );
-
+        GameObject _turret = Instantiate(upgradeData.prefab, transform.position + offset, Quaternion.identity);
         turret = _turret;
-
         // reconnect node
         turet turretScript = turret.GetComponent<turet>();
-
+        
         if (turretScript != null)
         {
             turretScript.SetNode(this);
         }
 
         // efect
-        GameObject effect = Instantiate(
-            buildManager.buildEffect,
-            transform.position,
-            Quaternion.identity
-        );
-
+        GameObject effect = Instantiate(buildManager.buildEffect, transform.position, Quaternion.identity);
         Destroy(effect, 5f);
-
         currentUpgradeLevel++;
-
-        
-            
         int up1 = 0;
         int up2 = 0;
         int up3 = 0;
-
         if (currentUpgradeLevel == 1)
             up1 = 1;
         else if (currentUpgradeLevel == 2)

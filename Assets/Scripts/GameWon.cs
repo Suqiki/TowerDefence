@@ -14,10 +14,13 @@ public class GameWon : MonoBehaviour
     public StarRatingUI starUI;
     
     public SupabaseManager supabase;
+
+    private GameManager gm;
     
     private void OnEnable()
     {
         ShowStarsOnOpen();
+        gm = FindFirstObjectByType<GameManager>();
     }
     
     public void Continue()
@@ -42,6 +45,8 @@ public class GameWon : MonoBehaviour
             PlayerPrefs.Save();
         }
         
+        SaveStars();
+        
         yield return PlayerProgressManager.instance.SaveOnGameOver();
 
         sceneFader.FadeTo(nextLevel);
@@ -59,6 +64,8 @@ public class GameWon : MonoBehaviour
             PlayerPrefs.Save();
         }
         
+        SaveStars();
+        
         yield return PlayerProgressManager.instance.SaveOnGameOver();
 
         sceneFader.FadeTo(menuSceneName);
@@ -66,10 +73,40 @@ public class GameWon : MonoBehaviour
     
     void ShowStarsOnOpen()
     {
-        GameManager gm = FindFirstObjectByType<GameManager>();
+        gm = FindFirstObjectByType<GameManager>();
         StarRating rating = gm.CalculateStars();
 
         starUI.Show(rating);
+    }
+    
+    void SaveStars()
+    {
+        string levelName = SceneManager.GetActiveScene().name;
+
+        StarRating rating = gm.CalculateStars();
+
+        int starsEarned = 0;
+
+        switch (rating)
+        {
+            case StarRating.Bronze:
+                starsEarned = 1;
+                break;
+            case StarRating.Silver:
+                starsEarned = 2;
+                break;
+            case StarRating.Gold:
+                starsEarned = 3;
+                break;
+        }
+
+        int oldStars = PlayerPrefs.GetInt(levelName + "Stars", 0);
+
+        if (starsEarned > oldStars)
+        {
+            PlayerPrefs.SetInt(levelName + "Stars", starsEarned);
+            PlayerPrefs.Save();
+        }
     }
     
     void SendLevelCompletedAnalytics()
